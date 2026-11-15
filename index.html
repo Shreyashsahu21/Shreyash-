@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RouteGuard | Safe Route Finder</title>
+
+    <!-- Leaflet CSS -->
+    <link
+        rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        crossorigin=""
+    >
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         NAVBAR
+    ========================== -->
+
+    <header class="navbar">
+
+        <div class="logo">
+
+            <span class="logo-icon">🛡️</span>
+
+            <span>
+                Route<span>Guard</span>
+            </span>
+
+        </div>
+
+
+        <nav>
+
+            <a href="#home">Home</a>
+
+            <a href="#map-section">Map</a>
+
+            <a href="#incidents">Incidents</a>
+
+            <a href="#about">About</a>
+
+        </nav>
+
+
+        <div class="navbar-actions">
+            <a class="admin-dashboard-btn" href="/admin" aria-label="Open admin dashboard">
+                <span class="admin-label-full">Admin dashboard</span>
+                <span class="admin-label-short">Admin</span>
+            </a>
+            <button id="open-sos" class="sos-btn" type="button">
+                ☎ SOS
+            </button>
+            <button
+                id="open-report"
+                class="report-btn"
+                type="button"
+            >
+                + Report Incident
+            </button>
+        </div>
+
+    </header>
+
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section
+        class="hero"
+        id="home"
+    >
+
+        <div class="hero-content">
+
+            <div class="badge">
+                🚦 Smart & Safe Route Planning
+            </div>
+
+
+            <h1>
+                Travel Smarter.<br>
+
+                <span>Stay Safer.</span>
+            </h1>
+
+
+            <p>
+                RouteGuard helps you identify incidents
+                on your route and find safer alternative routes.
+            </p>
+
+
+
+            <!-- ROUTE SEARCH -->
+
+            <div class="route-box">
+
+
+                <div class="input-group">
+
+                    <label>
+                        📍 From
+                    </label>
+
+                    <input
+                        type="text"
+                        id="source"
+                        placeholder="Enter your current location"
+                    >
+
+                </div>
+
+
+
+                <div class="route-line"></div>
+
+
+
+                <div class="input-group">
+
+                    <label>
+                         To
+                    </label>
+
+                    <input
+                        type="text"
+                        id="destination"
+                        placeholder="Enter your destination"
+                    >
+
+                </div>
+
+
+
+                <button
+                    id="find-route"
+                    class="find-btn"
+                    type="button"
+                >
+                    Find Safe Route →
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+
+    <!-- =========================
+         MAIN
+    ========================== -->
+
+    <main>
+
+
+
+        <!-- =========================
+             MAP SECTION
+        ========================== -->
+
+        <section
+            class="map-section"
+            id="map-section"
+        >
+
+
+            <div class="section-heading">
+
+
+                <div>
+
+                    <p class="small-title">
+                        LIVE OVERVIEW
+                    </p>
+
+                    <h2>
+                        Route & Incident Map
+                    </h2>
+
+                </div>
+
+
+                <div class="map-status">
+
+                    <span></span>
+
+                    Monitoring Active
+
+                </div>
+
+            </div>
+
+
+
+            <!-- REAL MAP -->
+
+            <div
+                id="map"
+                class="map-container"
+            ></div>
+
+            <section id="route-options" class="route-options" hidden aria-live="polite">
+                <div class="route-options-heading">
+                    <div>
+                        <p class="small-title">ROUTE CHOICES</p>
+                        <h3>Choose a route</h3>
+                    </div>
+                    <div class="route-options-actions">
+                        <p id="route-options-summary"></p>
+                        <button id="load-more-routes" class="more-routes-btn" type="button">
+                            Find more routes
+                        </button>
+                    </div>
+                </div>
+                <div id="route-options-list" class="route-options-list"></div>
+            </section>
+
+
+
+            <!-- MAP LEGEND -->
+
+            <div class="map-legend">
+
+
+                <div>
+                    <span class="legend-marker accident-marker"></span>
+                    Accident
+                </div>
+
+
+                <div>
+                    <span class="legend-marker traffic-marker"></span>
+                    Traffic
+                </div>
+
+
+                <div>
+                    <span class="legend-marker road-marker"></span>
+                    Roadblock
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+
+        <!-- =========================
+             INCIDENTS
+        ========================== -->
+
+        <section
+            class="incidents-section"
+            id="incidents"
+        >
+
+
+            <div class="section-heading">
+
+                <div>
+
+                    <p class="small-title">
+                        RECENT REPORTS
+                    </p>
+
+                    <h2>
+                        Nearby Incidents
+                    </h2>
+
+                </div>
+
+
+                <button
+                    id="show-incidents"
+                    class="view-btn"
+                    type="button"
+                >
+                    View All →
+                </button>
+
+            </div>
+
+
+
+            <div class="incident-grid">
+
+
+
+                <!-- ACCIDENT -->
+
+                <div class="incident-card">
+
+                    <div class="incident-top">
+
+                        <span class="incident-type accident">
+                            ⚠ Accident
+                        </span>
+
+                        <span class="time">
+                            15 min ago
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        Road Accident
+                    </h3>
+
+
+                    <p class="location">
+                        📍 Main Road
+                    </p>
+
+
+                    <p>
+                        Accident reported near the
+                        main intersection.
+                    </p>
+
+
+                    <div class="card-footer">
+
+                        <span class="severity high">
+                            High Impact
+                        </span>
+
+
+                        <button
+                            type="button"
+                            data-incident="accident"
+                        >
+                            View →
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- TRAFFIC -->
+
+                <div class="incident-card">
+
+                    <div class="incident-top">
+
+                        <span class="incident-type traffic">
+                            🚗 Traffic
+                        </span>
+
+                        <span class="time">
+                            28 min ago
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        Heavy Traffic
+                    </h3>
+
+
+                    <p class="location">
+                        📍 City Center
+                    </p>
+
+
+                    <p>
+                        Heavy traffic reported around
+                        the city center.
+                    </p>
+
+
+                    <div class="card-footer">
+
+                        <span class="severity medium">
+                            Medium Impact
+                        </span>
+
+
+                        <button
+                            type="button"
+                            data-incident="traffic"
+                        >
+                            View →
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- ROADBLOCK -->
+
+                <div class="incident-card">
+
+                    <div class="incident-top">
+
+                        <span class="incident-type blockage">
+                            🚧 Roadblock
+                        </span>
+
+                        <span class="time">
+                            42 min ago
+                        </span>
+
+                    </div>
+
+
+                    <h3>
+                        Road Construction
+                    </h3>
+
+
+                    <p class="location">
+                        📍 Ring Road
+                    </p>
+
+
+                    <p>
+                        Construction work is blocking
+                        one side of the road.
+                    </p>
+
+
+                    <div class="card-footer">
+
+                        <span class="severity low">
+                            Low Impact
+                        </span>
+
+
+                        <button
+                            type="button"
+                            data-incident="roadblock"
+                        >
+                            View →
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =========================
+             HOW IT WORKS
+        ========================== -->
+
+        <section
+            class="how-section"
+            id="about"
+        >
+
+
+            <div class="section-heading center">
+
+                <div>
+
+                    <p class="small-title">
+                        HOW IT WORKS
+                    </p>
+
+                    <h2>
+                        Your Journey, Made Safer
+                    </h2>
+
+                    <p>
+                        RouteGuard makes it easy to identify
+                        potential problems before you travel.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            <div class="steps">
+
+
+                <div class="step">
+
+                    <div class="step-number">
+                        01
+                    </div>
+
+                    <div class="step-icon">
+                        📍
+                    </div>
+
+                    <h3>
+                        Enter Your Route
+                    </h3>
+
+                    <p>
+                        Enter your starting location
+                        and destination.
+                    </p>
+
+                </div>
+
+
+
+                <div class="step">
+
+                    <div class="step-number">
+                        02
+                    </div>
+
+                    <div class="step-icon">
+                        🔍
+                    </div>
+
+                    <h3>
+                        Check Incidents
+                    </h3>
+
+                    <p>
+                        RouteGuard identifies reported
+                        incidents along your route.
+                    </p>
+
+                </div>
+
+
+
+                <div class="step">
+
+                    <div class="step-number">
+                        03
+                    </div>
+
+                    <div class="step-icon">
+                        🛡️
+                    </div>
+
+                    <h3>
+                        Choose Safely
+                    </h3>
+
+                    <p>
+                        Get warnings and choose a
+                        safer route.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- =========================
+         REPORT MODAL
+    ========================== -->
+
+    <div
+        class="modal"
+        id="reportModal"
+    >
+
+        <div class="modal-content">
+
+
+            <button
+                id="close-report"
+                class="close-btn"
+                type="button"
+            >
+                ×
+            </button>
+
+
+            <h2>
+                Report an Incident
+            </h2>
+
+
+            <p>
+                Help other travelers by reporting a road incident. Reports are shared with everyone using this RouteGuard server.
+            </p>
+
+
+            <form
+                id="report-form"
+            >
+
+
+                <label>
+                    Incident Type
+                </label>
+
+
+                <select
+                    id="incidentType"
+                    required
+                >
+
+                    <option value="">
+                        Select incident
+                    </option>
+
+                    <option value="Accident">
+                        Accident
+                    </option>
+
+                    <option value="Traffic">
+                        Heavy Traffic
+                    </option>
+
+                    <option value="Roadblock">
+                        Roadblock
+                    </option>
+
+                    <option value="Construction">
+                        Construction
+                    </option>
+
+                </select>
+
+
+
+                <label>
+                    Location
+                </label>
+
+
+                <input
+                    type="text"
+                    id="incidentLocation"
+                    placeholder="Enter location"
+                    required
+                >
+
+
+
+                <label>
+                    Description
+                </label>
+
+
+                <textarea
+                    id="incidentDescription"
+                    placeholder="Describe the incident"
+                    rows="4"
+                    required
+                ></textarea>
+
+
+
+                <button
+                    type="submit"
+                    class="submit-btn"
+                >
+                    Submit Report
+                </button>
+
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <div
+        class="modal"
+        id="sosModal"
+        aria-hidden="true"
+    >
+        <section class="modal-content sos-content" role="dialog" aria-modal="true" aria-labelledby="sos-title">
+            <button id="close-sos" class="close-btn" type="button" aria-label="Close emergency options">×</button>
+            <span class="sos-symbol" aria-hidden="true">☎</span>
+            <p class="sos-label">Emergency call · India</p>
+            <h2 id="sos-title">Need urgent help?</h2>
+            <p>If someone is in immediate danger in India, you can call the national emergency number 112.</p>
+            <div class="sos-notice">
+                This opens your device’s phone app. RouteGuard does not place the call or send your location automatically.
+            </div>
+            <a id="call-emergency" class="sos-call-button" href="tel:112">Call 112</a>
+            <button id="cancel-sos" class="sos-cancel-button" type="button">Cancel</button>
+            <p class="sos-footnote">If you are outside India, use your local emergency number.</p>
+        </section>
+    </div>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        <div class="footer-logo">
+            🛡️ RouteGuard
+        </div>
+
+        <p>
+            Making everyday journeys safer.
+        </p>
+
+        <a class="admin-link" href="/admin">Admin dashboard (public read-only)</a>
+
+        <p class="copyright">
+            © 2026 RouteGuard. Mini Project.
+        </p>
+
+    </footer>
+
+
+
+    <!-- Leaflet JavaScript -->
+
+    <script
+        src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        crossorigin=""
+    ></script>
+
+
+    <script type="module" src="script.js"></script>
+
+</body>
+
+</html>
