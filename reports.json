@@ -1,0 +1,24 @@
+[
+  {
+    "id": "48e6f136-f620-4985-bb95-9d93e1878711",
+    "type": "Traffic",
+    "location": "Bilaspur expressway",
+    "description": "too many vehicles stuck",
+    "coordinates": [
+      29.1162704,
+      78.8780919
+    ],
+    "createdAt": "2026-11-13T09:15:13.862Z"
+  },
+  {
+    "id": "5d6cef56-f589-4b54-90b9-8b822c8c3e02",
+    "type": "Accident",
+    "location": "bilaspur expressway",
+    "description": "car collide with truck",
+    "coordinates": [
+      29.1162704,
+      78.8780919
+    ],
+    "createdAt": "2026-11-13T09:12:38.324Z"
+  }
+]
